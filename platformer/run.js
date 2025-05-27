@@ -9,24 +9,11 @@ const background = new Sprites({
 
 const floor = new Array2d({x: 32, array1D: maps[0]})
 const floorcollisions2D = floor.findArray()
-const collisionblocks = []
-floorcollisions2D.forEach((row, y) => {
-    row.forEach((symbol, x) => {
-        if (symbol == 1) {
-            collisionblocks.push(new collisionblock({
-                position: {
-                    x: x * 90,
-                    y: y * 90,
-                },
-                size: {
-                    height: 90,
-                    width: 90,
-                }
-            }))
-        }
-    })
-})
-console.log(collisionblocks)
+const allcollision = new groupcollision({blockSize: {
+    height: 90,
+    width: 90,
+}, floorcollisions2D: floorcollisions2D, type: 1})
+allcollision.createcollisionblock()
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -37,11 +24,8 @@ function animate() {
     canvasContext.scale(scale, scale)
     canvasContext.translate(0, (canvas.height/scale) - background.image.height)
     background.draw()
-    collisionblocks.forEach((collisionBlock) => {
-        collisionBlock.draw()
-    })
+    allcollision.update()
     canvasContext.restore()
-
     one.update()
 }
 

@@ -1,7 +1,8 @@
 class collisionblock {
-    constructor({position, size}) {
+    constructor({position, size, type}) {
         this.position = position
         this.size = size
+        this.type = type
     }
 
     draw() {
