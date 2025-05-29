@@ -1,4 +1,3 @@
-const one = new player({position: {x: 0, y: 0,}, velocity: {x: 0, y: 0,}, gravity: {y: .5, x: 0}, size: {height: 128, width: 64}, drag: 1.1, imagesrc: "pictures/char1.png"});
 const background = new Sprites({
     position: {
         x: 0,
@@ -14,6 +13,18 @@ const allcollision = new groupcollision({blockSize: {
     width: 90,
 }, floorcollisions2D: floorcollisions2D, type: 1})
 allcollision.createcollisionblock()
+const allplat = new groupcollision({blockSize: {
+    height: 90,
+    width: 90,
+}, floorcollisions2D: floorcollisions2D, type: 2})
+allplat.createcollisionblock()
+const alltele = new groupcollision({blockSize: {
+    height: 90,
+    width: 90,
+}, floorcollisions2D: floorcollisions2D, type: 3})
+alltele.createcollisionblock()
+
+const one = new player({position: {x: 200, y: 0,}, velocity: {x: 0, y: 0,}, gravity: {y: .5, x: 0}, size: {height: 128, width: 64}, drag: 1.1, imagesrc: "pictures/char1.png", collision: allcollision.createcollisionblock()});
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -25,8 +36,10 @@ function animate() {
     canvasContext.translate(0, (canvas.height/scale) - background.image.height)
     background.draw()
     allcollision.update()
-    canvasContext.restore()
+    allplat.update()
+    alltele.update()
     one.update()
+    canvasContext.restore()
 }
 
 

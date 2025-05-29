@@ -8,7 +8,7 @@ class groupcollision {
         this.collisionblocks = []
         this.floorcollisions2D.forEach((row, y) => {
             row.forEach((symbol, x) => {
-                if (symbol == 1) {
+                if (symbol == this.type) {
                     this.collisionblocks.push(new collisionblock({
                         position: {
                             x: x * this.size.height,
@@ -23,6 +23,7 @@ class groupcollision {
              }
            })
         })
+        return this.collisionblocks
     }
     update() {
         this.collisionblocks.forEach((collisionBlock) => {

@@ -1,12 +1,13 @@
 //makes a player with position, velocity, gravity, height, width, drag, and imagesrc
 class player {
-    constructor({position, velocity, gravity, size, drag, imagesrc}) {
+    constructor({position, velocity, gravity, size, drag, imagesrc, collision}) {
         this.position = position
         this.velocity = velocity
         this.gravity = gravity
         this.size = size
         this.drag = drag
         this.imagesrc = imagesrc
+        this.collision = collision
     }
 
     draw() {
@@ -32,17 +33,59 @@ class player {
         this.position.x = x
     }
 
+    checkVerticalCollision() {
+        for (let i = 0; i < this.collision.length; i++) {
+            const collisionBlock = this.collision[i]
+            if(collision({object1: this, object2: collisionBlock})) {
+                if(this.velocity.y > 0) {
+                this.velocity.y = 0
+                this.position.y = collisionBlock.position.y - this.size.height -0.01
+                break
+                }
+                if(this.velocity.y < 0) {
+                    this.velocity.y = 0
+                    this.position.y = collisionBlock.position.y + collisionBlock.size.height + 0.01
+                    break
+                }
+            }
+        }
+    }
+
+    applyGravityy() {
+        this.position.y += this.velocity.y
+        this.velocity.y += this.gravity.y
+    }
+
+    applyGravityx() {
+        this.position.x += this.velocity.x
+        this.velocity.x += this.gravity.x;
+    }
+
+    checkHorizontalCollision() {
+        for (let i = 0; i < this.collision.length; i++) {
+            const collisionBlock = this.collision[i]
+            if(collision({object1: this, object2: collisionBlock})) {
+                if(this.velocity.x > 0) {
+                this.velocity.x = 0
+                this.position.x = collisionBlock.position.x - this.size.width -0.01
+                break
+                }
+                if(this.velocity.x < 0) {
+                    this.velocity.x = 0
+                    this.position.x = collisionBlock.position.x + collisionBlock.size.width + 0.01
+                    break
+                }
+            }
+        }
+    }
+
     update() {
         this.draw()
-        this.position.y += this.velocity.y
-        this.position.x += this.velocity.x
+        this.applyGravityx()
+        this.checkHorizontalCollision()
+        this.applyGravityy()
+        this.checkVerticalCollision()
         this.velocity.x /= this.drag
-        if (this.position.y + this.size.height + this.velocity.y < canvas.height) {
-            this.velocity.y += this.gravity.y
-        } else {
-            this.velocity.y = 0
-        }
-        this.velocity.x += this.gravity.x;
         if (keys.a.pressed) {
             this.velocity.x = -5
         }
